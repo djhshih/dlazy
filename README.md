@@ -1,6 +1,13 @@
 # dlazy
 
-Execute a directory of scripts lazily.
+Execute a directory of jobs lazily.
+
+**Problem**: You have many long-running jobs to run locally,
+but these jobs may fail unexpected or be interrupted.
+You want to easily run jobs that have not previously completed successfully.
+
+`dlazy` executes each script job in a directory, and repeated calls
+to `dlazy` will only re-executes jobs that have not completed successfully.
 
 
 # Installation
@@ -32,6 +39,10 @@ dlazy job
 
 The log files (`.stdout` and `.stderr`), as well as
 the return code file (`.rc`), will be written to the `log` directory.
+
+If you wish to re-execute a job, you can simply delete the corresponding
+`.rc` file before you run `dlazy` again.
+
 
 Optionally, if you have GNU `parallel` available, you can also execute the
 jobs locally in parallel:
