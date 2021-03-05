@@ -16,6 +16,18 @@ to `dlazy` will only re-executes jobs that have not completed successfully.
 make install
 ```
 
+You can also install the programs locally in places such as `~/local`.
+
+```
+make install DESTDIR=~/local
+```
+
+In this case, you should ensure that `~/local/bin` is in your PATH:
+
+```
+export PATH+=:~/local/bin
+```
+
 
 # Usage
 
