@@ -1,5 +1,5 @@
-DESTDIR ?= /usr/local/bin
+DESTDIR ?= /usr/local
 
 install:
-	install bin/* $(DESTDIR)
+	install bin/* $(DESTDIR)/bin
 
