@@ -1,0 +1,28 @@
+#!/bin/bash
+# Execute a directory of scripts locally and in parallel,
+# but only those that have not succeeded before.
+
+set -euo pipefail
+
+if (( $# < 1 )); then
+	echo "usage: ${0##*/} <indir>"
+	exit 1
+fi
+
+indir=$1
+shift
+
+logdir=log
+
+mkdir -p $logdir
+
+lazy_wrap() {
+	for fpath in $indir/*.sh; do
+		fname=${fpath##*/}
+		fstem=${fname%%.*}
+		rcfile=$logdir/$fstem.rc
+		echo "lazy $rcfile bash $fpath > $logdir/$fstem.stdout 2> $logdir/$fstem.stderr"
+	done
+}
+
+lazy_wrap | parallel $@

@@ -1,0 +1,25 @@
+#!/bin/bash
+# Prepare a directory of job scripts for later execution.
+
+set -euo pipefail
+
+if (( $# < 2 )); then
+	echo "usage: ${0##*/} <infile> <command> ..."
+	exit 1
+fi
+
+infile=$1
+
+jobdir=job
+
+# remove first argument
+shift
+
+mkdir -p $jobdir
+
+for fpath in $(cat $infile); do
+	fname=${fpath##*/}
+	fstem=${fname%%.*}
+	# set up script command with input from file
+	echo "$@ $fpath" > $jobdir/$fstem.sh
+done

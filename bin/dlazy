@@ -1,0 +1,30 @@
+#!/bin/bash
+# Execute a directory of scripts locally and sequentially,
+# but only those that have not succeeded before.
+
+# We do not use `set -e`, because we need to continue past error
+# and write the return code.
+set -u
+
+if (( $# < 1 )); then
+	echo "usage: ${0##*/} <indir>"
+	exit 1
+fi
+
+indir=$1
+
+logdir=log
+
+mkdir -p $logdir
+
+for fpath in $indir/*.sh; do
+	fname=${fpath##*/}
+	fstem=${fname%%.*}
+	rcfile=$logdir/$fstem.rc
+	if [[ ! -f $rcfile ]] || (( $(cat $rcfile) != 0 )); then
+		echo $fpath
+		bash $fpath > $logdir/$fstem.stdout 2> $logdir/$fstem.stderr
+		echo $? > $rcfile
+	fi
+done
+

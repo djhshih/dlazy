@@ -1,0 +1,26 @@
+#!/bin/bash
+# Run command only if it has not succeeded before.
+
+# We do not use `set -e`, because we need to continue past error
+# and write the return code.
+set -u
+
+if (( $# < 2 )); then
+	echo "usage: ${0##*/} <rc-file> <command> ..."
+	exit 1
+fi
+
+rcfile=$1
+
+# remove first argument
+shift
+
+if [[ ! -f $rcfile ]] || (( $(cat $rcfile) != 0 )); then
+	# run command
+	"$@"
+	# output return code
+	logdir=${rcfile%/*}
+	[[ ! -d $logdir ]] || mkdir -p $logdir
+	echo $? > $rcfile
+fi
+
