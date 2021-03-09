@@ -15,12 +15,13 @@ rcfile=$1
 # remove first argument
 shift
 
+logdir=${rcfile%/*}
+[[ ! -d $logdir ]] || mkdir -p $logdir
+
 if [[ ! -f $rcfile ]] || (( $(cat $rcfile) != 0 )); then
 	# run command
 	"$@"
 	# output return code
-	logdir=${rcfile%/*}
-	[[ ! -d $logdir ]] || mkdir -p $logdir
 	echo $? > $rcfile
 fi
 
