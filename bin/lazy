@@ -16,11 +16,14 @@ rcfile=$1
 shift
 
 if [[ ! -f $rcfile ]] || (( $(cat $rcfile) != 0 )); then
+	# prepare directory
+	rcdir=${rcfile%/*}
+	if [[ $rcdir != $rcfile ]]; then
+		[[ -d $rcdir ]] || mkdir -p $rcdir
+	fi
 	# run command
 	"$@"
 	# output return code
-	logdir=${rcfile%/*}
-	[[ ! -d $logdir ]] || mkdir -p $logdir
 	echo $? > $rcfile
 fi
 
