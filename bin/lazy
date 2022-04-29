@@ -15,6 +15,9 @@ rcfile=$1
 # remove first argument
 shift
 
+logdir=${rcfile%/*}
+[[ ! -d $logdir ]] || mkdir -p $logdir
+
 if [[ ! -f $rcfile ]] || (( $(cat $rcfile) != 0 )); then
 	# prepare directory
 	rcdir=${rcfile%/*}
